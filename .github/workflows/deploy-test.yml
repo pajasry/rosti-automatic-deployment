@@ -1,0 +1,26 @@
+name: Deploy application
+
+on:
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v1
+      - name: Branch
+        run: echo running on branch ${GITHUB_REF##*/}
+      - name: Deploy NodeJS app
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host: ${{secrets.SSH_HOST}}
+          port: ${{secrets.SSH_PORT}}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd /srv/app/test
+            git pull origin ${GITHUB_REF##*/}
+            npm install
+            npm start
+            supervisorctl restart nginx
