@@ -1,4 +1,4 @@
-name: Deploy application
+name: Deploy to Test
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v1
       - name: Branch
-        run: echo running on branch ${GITHUB_REF##*/}
+        run: echo running on branch ${{GITHUB_REF##*/}}
       - name: Deploy NodeJS app
         uses: appleboy/ssh-action@v0.1.2
         with:
@@ -20,7 +20,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             cd /srv/app/test
-            git pull origin ${GITHUB_REF##*/}
+            git pull origin ${{GITHUB_REF##*/}}
             npm install
             npm start
             supervisorctl restart nginx
