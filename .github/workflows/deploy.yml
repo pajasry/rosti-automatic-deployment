@@ -17,6 +17,8 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             cd /srv/app/prod
+            whoami
+            ls -la
             git pull origin main
             npm install
             npm start
