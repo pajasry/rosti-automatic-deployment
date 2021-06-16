@@ -23,5 +23,4 @@ jobs:
             cd /srv/app/test
             git pull origin ${BRANCH_NAME}
             npm install
-            npm start
-            supervisorctl restart nginx
+            supervisorctl restart app
