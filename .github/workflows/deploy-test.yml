@@ -7,8 +7,7 @@ jobs:
   deploy-test:
     runs-on: ubuntu-latest
     steps:
-      - run: echo running on branch ${{github.payload.pull_request.head.ref}}
-      - name: Deploy NodeJS app
+      - name: Deploy
         uses: appleboy/ssh-action@v0.1.2
         with:
           host: ${{secrets.SSH_HOST}}
@@ -19,6 +18,7 @@ jobs:
             cd /srv/app/test
             git pull origin $BRANCH
             npm install
+            git checkout $BRANCH
             supervisorctl restart app
     env:
       BRANCH: ${{github.payload.pull_request.head.ref}}
