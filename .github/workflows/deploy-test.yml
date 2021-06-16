@@ -20,5 +20,5 @@ jobs:
             git pull origin $BRANCH
             npm install
             supervisorctl restart app
-          env:
-            BRANCH: ${{github.payload.pull_request.head.ref}}
+    env:
+      BRANCH: ${{github.payload.pull_request.head.ref}}

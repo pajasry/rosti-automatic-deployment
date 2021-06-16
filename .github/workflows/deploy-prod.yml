@@ -19,5 +19,4 @@ jobs:
             cd /srv/app/prod
             git pull origin main
             npm install
-            npm start
-            supervisorctl restart nginx
+            supervisorctl restart app
