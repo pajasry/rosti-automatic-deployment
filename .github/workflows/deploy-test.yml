@@ -1,17 +1,13 @@
-name: Deploy application
+name: Deploy to Test
 
 on:
   pull_request:
 
 jobs:
-  deploy:
+  deploy-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Git checkout
-        uses: actions/checkout@v1
-      - name: Branch
-        run: echo running on branch ${GITHUB_REF##*/}
-      - name: Deploy NodeJS app
+      - name: Deploy
         uses: appleboy/ssh-action@v0.1.2
         with:
           host: ${{secrets.SSH_HOST}}
@@ -19,8 +15,11 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
+            echo $BRANCH
             cd /srv/app/test
-            git pull origin ${GITHUB_REF##*/}
+            git pull origin $BRANCH
+            git checkout $BRANCH
             npm install
-            npm start
-            supervisorctl restart nginx
+            supervisorctl restart app
+    env:
+      BRANCH: ${{github.payload.pull_request.head.ref}}
