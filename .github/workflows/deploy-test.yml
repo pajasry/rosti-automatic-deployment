@@ -4,10 +4,10 @@ on:
   pull_request:
 
 jobs:
-  deploy:
+  deploy-test:
     runs-on: ubuntu-latest
     steps:
-      - run: echo running on branch ${github.payload.pull_request.head.ref }
+      - run: echo running on branch ${{github.payload.pull_request.head.ref}}
       - name: Deploy NodeJS app
         uses: appleboy/ssh-action@v0.1.2
         with:
@@ -17,6 +17,8 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             cd /srv/app/test
-            git pull origin {github.payload.pull_request.head.ref }
+            git pull origin $BRANCH
             npm install
             supervisorctl restart app
+          env:
+            BRANCH: ${{github.payload.pull_request.head.ref}}
