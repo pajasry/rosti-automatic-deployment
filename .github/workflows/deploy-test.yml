@@ -15,10 +15,11 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
+            echo $BRANCH
             cd /srv/app/test
             git pull origin $BRANCH
-            npm install
             git checkout $BRANCH
+            npm install
             supervisorctl restart app
     env:
       BRANCH: ${{github.payload.pull_request.head.ref}}
