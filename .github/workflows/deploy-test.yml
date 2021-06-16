@@ -7,11 +7,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Git checkout
-        uses: actions/checkout@v1
-      - name: Branch
-        uses: nelonoel/branch-name@v1.0.1
-      - run: echo running on branch ${BRANCH_NAME}
+      - run: echo running on branch ${github.payload.pull_request.head.ref }
       - name: Deploy NodeJS app
         uses: appleboy/ssh-action@v0.1.2
         with:
@@ -21,6 +17,6 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             cd /srv/app/test
-            git pull origin ${BRANCH_NAME}
+            git pull origin {github.payload.pull_request.head.ref }
             npm install
             supervisorctl restart app
